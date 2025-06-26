@@ -1,0 +1,20 @@
+/* src/assets/theme.css */
+:root {
+  --primary-color: #3b82f6;
+  --surface-ground: #f8f9fa;
+  --surface-card: #ffffff;
+  --text-color: #495057;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-color);
+  background-color: var(--surface-ground);
+  margin: 0;
+  padding: 0;
+}
+
+.p-component {
+  font-family: var(--font-family);
+  font-size: 1rem;
+}
