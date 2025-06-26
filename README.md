@@ -1,6 +1,6 @@
 # Property Agent Management Application
 
-A full-stack application for managing property agents and their properties built with Vue 3 + TypeScript frontend and NestJS backend.
+This is a full-stack application for managing property agents and their properties built with Vue 3 + TypeScript frontend and NestJS backend. This is intended as a test for Rent Pure.
 
 ## Project Structure
 
@@ -80,4 +80,4 @@ The development server will start at `http://localhost:5173` by default.
 3. Open your browser and navigate to `http://localhost:5173`
 
 
-This is intended as a test for Rent Pure
+By Adulfo Emmanuel Respecia
