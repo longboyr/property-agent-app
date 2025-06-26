@@ -1,55 +1,62 @@
 <!-- src/components/AgentForm.vue -->
 <template>
-  <form @submit.prevent="handleSubmit" class="p-fluid">
-    <div class="p-field p-mb-3">
-      <label for="name">Name</label>
+  <form @submit.prevent="handleSubmit" class="flex flex-column gap-3">
+    <div class="field">
+      <label for="name" class="font-bold">Name</label>
       <InputText
         id="name"
         v-model="formData.name"
         :class="{ 'p-invalid': v$.name.$error }"
         aria-describedby="name-help"
+        placeholder="Enter agent name"
       />
       <small v-if="v$.name.$error" id="name-help" class="p-error">{{
         v$.name.$errors[0].$message
       }}</small>
     </div>
 
-    <div class="p-field p-mb-3">
-      <label for="email">Email</label>
+    <div class="field">
+      <label for="email" class="font-bold">Email</label>
       <InputText
         id="email"
         v-model="formData.email"
         :class="{ 'p-invalid': v$.email.$error }"
         aria-describedby="email-help"
+        placeholder="Enter agent email"
       />
       <small v-if="v$.email.$error" id="email-help" class="p-error">{{
         v$.email.$errors[0].$message
       }}</small>
     </div>
 
-    <div class="p-field p-mb-3">
-      <label for="phone">Phone</label>
+    <div class="field">
+      <label for="phone" class="font-bold">Phone</label>
       <InputText
         id="phone"
         v-model="formData.phone"
         :class="{ 'p-invalid': v$.phone.$error }"
         aria-describedby="phone-help"
+        placeholder="Enter agent phone"
       />
       <small v-if="v$.phone.$error" id="phone-help" class="p-error">{{
         v$.phone.$errors[0].$message
       }}</small>
     </div>
 
-    <div class="p-field p-mb-3">
-      <label for="address">Address</label>
-      <InputText id="address" v-model="formData.address" />
+    <div class="field">
+      <label for="address" class="font-bold">Address</label>
+      <InputText 
+        id="address" 
+        v-model="formData.address" 
+        placeholder="Enter agent address"
+      />
     </div>
 
-    <div class="p-d-flex p-jc-between">
+    <div class="flex justify-content-between mt-4">
       <Button
         type="button"
         label="Clear"
-        class="p-button-secondary"
+        class="p-button-outlined p-button-secondary"
         icon="pi pi-times"
         @click="resetForm"
       />
