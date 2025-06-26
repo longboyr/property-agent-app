@@ -1,34 +1,55 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+  HttpCode,
+  HttpStatus,
+  ValidationPipe,
+} from '@nestjs/common';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
+import { Property } from './entities/property.entity';
 
-@Controller('property')
+@Controller('properties')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
   @Post()
-  create(@Body() createPropertyDto: CreatePropertyDto) {
+  create(@Body(ValidationPipe) createPropertyDto: CreatePropertyDto): Property {
     return this.propertyService.create(createPropertyDto);
   }
 
   @Get()
-  findAll() {
+  findAll(): Property[] {
     return this.propertyService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.propertyService.findOne(+id);
+  findOne(@Param('id') id: string): Property {
+    return this.propertyService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePropertyDto: UpdatePropertyDto) {
-    return this.propertyService.update(+id, updatePropertyDto);
+  @Get(':id/details')
+  async getPropertyWithDetails(@Param('id') id: string) {
+    return await this.propertyService.getPropertyWithDetails(id);
+  }
+
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body(ValidationPipe) updatePropertyDto: UpdatePropertyDto,
+  ): Property {
+    return this.propertyService.update(id, updatePropertyDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.propertyService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id') id: string): void {
+    this.propertyService.remove(id);
   }
 }
