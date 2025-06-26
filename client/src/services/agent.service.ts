@@ -19,7 +19,7 @@ export default {
   },
 
   async update(id: number, agent: CreateAgentDTO): Promise<PropertyAgent> {
-    const response = await apiClient.patch(`/property-agents/${id}`, agent);
+    const response = await apiClient.put(`/property-agents/${id}`, agent);
     return response.data;
   },
 
