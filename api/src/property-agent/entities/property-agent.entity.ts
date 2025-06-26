@@ -1,1 +1,9 @@
-export class PropertyAgent {}
+export class PropertyAgent {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobileNumber: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

@@ -1,26 +1,69 @@
-import { Injectable } from '@nestjs/common';
+// src/property-agent/property-agent.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePropertyAgentDto } from './dto/create-property-agent.dto';
 import { UpdatePropertyAgentDto } from './dto/update-property-agent.dto';
+import { PropertyAgent } from './entities/property-agent.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PropertyAgentService {
-  create(createPropertyAgentDto: CreatePropertyAgentDto) {
-    return 'This action adds a new propertyAgent';
+  private propertyAgents: PropertyAgent[] = [];
+
+  create(createPropertyAgentDto: CreatePropertyAgentDto): PropertyAgent {
+    const newAgent: PropertyAgent = {
+      id: uuidv4(),
+      ...createPropertyAgentDto,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    this.propertyAgents.push(newAgent);
+    return newAgent;
   }
 
-  findAll() {
-    return `This action returns all propertyAgent`;
+  findAll(): PropertyAgent[] {
+    return this.propertyAgents;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} propertyAgent`;
+  findOne(id: string): PropertyAgent {
+    const agent = this.propertyAgents.find((agent) => agent.id === id);
+    if (!agent) {
+      throw new NotFoundException(`Property agent with ID ${id} not found`);
+    }
+    return agent;
   }
 
-  update(id: number, updatePropertyAgentDto: UpdatePropertyAgentDto) {
-    return `This action updates a #${id} propertyAgent`;
+  update(
+    id: string,
+    updatePropertyAgentDto: UpdatePropertyAgentDto,
+  ): PropertyAgent {
+    const agentIndex = this.propertyAgents.findIndex(
+      (agent) => agent.id === id,
+    );
+
+    if (agentIndex === -1) {
+      throw new NotFoundException(`Property agent with ID ${id} not found`);
+    }
+
+    const updatedAgent = {
+      ...this.propertyAgents[agentIndex],
+      ...updatePropertyAgentDto,
+      updatedAt: new Date(),
+    };
+
+    this.propertyAgents[agentIndex] = updatedAgent;
+    return updatedAgent;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} propertyAgent`;
+  remove(id: string): void {
+    const agentIndex = this.propertyAgents.findIndex(
+      (agent) => agent.id === id,
+    );
+
+    if (agentIndex === -1) {
+      throw new NotFoundException(`Property agent with ID ${id} not found`);
+    }
+
+    this.propertyAgents.splice(agentIndex, 1);
   }
 }
