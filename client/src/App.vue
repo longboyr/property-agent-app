@@ -10,7 +10,7 @@
   </main>
 
   <footer class="p-3 text-center bg-light">
-    <p class="m-0">© 2025 Property Agent Management System</p>
+    <p class="m-0">© Adulfo Emmanuel Respecia - Rent Pure Test</p>
   </footer>
 </template>
 

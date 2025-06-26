@@ -2,37 +2,71 @@
 <template>
   <Dialog 
     :visible="visible" 
-    :header="agent ? `Properties for ${agent.name}` : 'Properties'"
+    :header="agent ? `Properties for ${agent.firstName} ${agent.lastName}` : 'Properties'"
     :modal="true"
     :closable="true"
     :style="{width: '80vw'}"
+    :pt="{
+      root: { class: 'border-round-lg' },
+      header: { class: 'bg-primary text-white' }
+    }"
+    @update:visible="$emit('update:visible', $event)"
     @hide="$emit('close')"
   >
     <div v-if="agent" class="property-modal-content">
       <div v-if="loading" class="loading-container">
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <i class="pi pi-spin pi-spinner text-primary" style="font-size: 2rem"></i>
         <p>Loading properties...</p>
       </div>
       
       <div v-else-if="properties.length === 0" class="empty-state">
+        <i class="pi pi-home text-primary mb-3" style="font-size: 2rem"></i>
         <p>No properties found for this agent.</p>
-        <Button label="Add Property" icon="pi pi-plus" @click="showAddPropertyForm = true" />
+        <Button 
+          label="Add Property" 
+          icon="pi pi-plus" 
+          class="p-button-primary" 
+          @click="showAddPropertyForm = true" 
+        />
       </div>
       
       <div v-else class="properties-container">
-        <DataTable :value="properties" responsiveLayout="scroll">
-          <Column field="id" header="ID"></Column>
-          <Column field="address" header="Address"></Column>
-          <Column header="Actions">
+        <DataTable 
+          :value="properties" 
+          stripedRows
+          showGridlines
+          class="p-datatable-sm"
+        >
+          <Column field="id" header="ID" style="width: 10%"></Column>
+          <Column field="address" header="Address" style="width: 50%"></Column>
+          <Column field="propertyType" header="Type" style="width: 20%"></Column>
+          <Column header="Actions" style="width: 20%">
             <template #body="slotProps">
-              <Button icon="pi pi-pencil" class="p-button-text p-button-rounded" @click="editProperty(slotProps.data)" />
-              <Button icon="pi pi-eye" class="p-button-text p-button-rounded" @click="viewPropertyDetails(slotProps.data)" />
+              <div class="flex gap-2">
+                <Button 
+                  icon="pi pi-pencil" 
+                  class="p-button-text p-button-rounded" 
+                  v-tooltip.top="'Edit'"
+                  @click="editProperty(slotProps.data)" 
+                />
+                <Button 
+                  icon="pi pi-eye" 
+                  class="p-button-text p-button-rounded p-button-info" 
+                  v-tooltip.top="'View Details'"
+                  @click="viewPropertyDetails(slotProps.data)" 
+                />
+              </div>
             </template>
           </Column>
         </DataTable>
         
-        <div class="p-mt-3">
-          <Button label="Add Property" icon="pi pi-plus" @click="showAddPropertyForm = true" />
+        <div class="mt-3 flex justify-content-end">
+          <Button 
+            label="Add Property" 
+            icon="pi pi-plus" 
+            class="p-button-primary" 
+            @click="showAddPropertyForm = true" 
+          />
         </div>
       </div>
       
@@ -42,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { usePropertyStore } from '../stores/propertyStore';
 import type { PropertyAgent, Property } from '../types';
 import Dialog from 'primevue/dialog';
@@ -50,44 +84,36 @@ import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
-// Props and emits
 const props = defineProps<{
   visible: boolean;
   agent: PropertyAgent | null;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'close'): void;
+  (e: 'update:visible', value: boolean): void;
 }>();
 
-// Store
 const propertyStore = usePropertyStore();
-const properties = computed(() => propertyStore.properties);
 const loading = computed(() => propertyStore.loading);
+const properties = computed(() => propertyStore.properties);
 const showAddPropertyForm = ref(false);
 
 // Methods
-const editProperty = (property: Property) => {
+function editProperty(property: Property) {
   // To be implemented
   console.log('Edit property:', property);
-};
+}
 
-const viewPropertyDetails = (property: Property) => {
+function viewPropertyDetails(property: Property) {
   // To be implemented
   console.log('View property details:', property);
-};
+}
 
 // Load properties when modal becomes visible with an agent
 watch(() => props.visible && props.agent, (shouldLoad) => {
   if (shouldLoad && props.agent) {
     propertyStore.fetchAgentProperties(props.agent.id);
-  }
-}, { immediate: true });
-
-// Clean up when modal is closed
-watch(() => props.visible, (isVisible) => {
-  if (!isVisible) {
-    showAddPropertyForm.value = false;
   }
 });
 </script>
@@ -102,11 +128,22 @@ watch(() => props.visible, (isVisible) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  height: 300px;
+  gap: 1rem;
 }
 
 .empty-state {
-  text-align: center;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 0.5rem;
+}
+
+.properties-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 </style>

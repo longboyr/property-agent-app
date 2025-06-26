@@ -9,9 +9,8 @@ import "./style.css";
 // PrimeVue
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
+import Aura from "@primeuix/themes/aura";
 
-// Import only the core styles and icons
-// We'll handle themes differently
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 
@@ -19,7 +18,11 @@ const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
-app.use(PrimeVue);
+app.use(PrimeVue, {
+  theme: {
+    preset: Aura,
+  },
+});
 app.use(ToastService);
 
 app.mount("#app");

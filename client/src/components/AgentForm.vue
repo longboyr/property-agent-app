@@ -2,59 +2,63 @@
 <template>
   <form @submit.prevent="handleSubmit" class="flex flex-column gap-3">
     <div class="field">
-      <label for="firstName" class="font-bold">First Name</label>
+      <label for="firstName" class="font-bold block mb-2">First Name</label>
       <InputText
         id="firstName"
         v-model="formData.firstName"
         :class="{ 'p-invalid': v$.firstName.$error }"
         aria-describedby="firstName-help"
         placeholder="Enter first name"
+        class="w-full"
       />
-      <small v-if="v$.firstName.$error" id="firstName-help" class="p-error">{{
-        v$.firstName.$errors[0].$message
-      }}</small>
+      <small v-if="v$.firstName.$error" id="firstName-help" class="p-error block mt-1">
+        {{ v$.firstName.$errors[0].$message }}
+      </small>
     </div>
 
     <div class="field">
-      <label for="lastName" class="font-bold">Last Name</label>
+      <label for="lastName" class="font-bold block mb-2">Last Name</label>
       <InputText
         id="lastName"
         v-model="formData.lastName"
         :class="{ 'p-invalid': v$.lastName.$error }"
         aria-describedby="lastName-help"
         placeholder="Enter last name"
+        class="w-full"
       />
-      <small v-if="v$.lastName.$error" id="lastName-help" class="p-error">{{
-        v$.lastName.$errors[0].$message
-      }}</small>
+      <small v-if="v$.lastName.$error" id="lastName-help" class="p-error block mt-1">
+        {{ v$.lastName.$errors[0].$message }}
+      </small>
     </div>
 
     <div class="field">
-      <label for="email" class="font-bold">Email</label>
+      <label for="email" class="font-bold block mb-2">Email</label>
       <InputText
         id="email"
         v-model="formData.email"
         :class="{ 'p-invalid': v$.email.$error }"
         aria-describedby="email-help"
         placeholder="Enter email address"
+        class="w-full"
       />
-      <small v-if="v$.email.$error" id="email-help" class="p-error">{{
-        v$.email.$errors[0].$message
-      }}</small>
+      <small v-if="v$.email.$error" id="email-help" class="p-error block mt-1">
+        {{ v$.email.$errors[0].$message }}
+      </small>
     </div>
 
     <div class="field">
-      <label for="mobileNumber" class="font-bold">Mobile Number</label>
+      <label for="mobileNumber" class="font-bold block mb-2">Mobile Number</label>
       <InputText
         id="mobileNumber"
         v-model="formData.mobileNumber"
         :class="{ 'p-invalid': v$.mobileNumber.$error }"
         aria-describedby="mobileNumber-help"
         placeholder="Enter mobile number"
+        class="w-full"
       />
-      <small v-if="v$.mobileNumber.$error" id="mobileNumber-help" class="p-error">{{
-        v$.mobileNumber.$errors[0].$message
-      }}</small>
+      <small v-if="v$.mobileNumber.$error" id="mobileNumber-help" class="p-error block mt-1">
+        {{ v$.mobileNumber.$errors[0].$message }}
+      </small>
     </div>
 
     <div class="flex justify-content-between mt-4">
@@ -63,6 +67,7 @@
         label="Clear"
         class="p-button-outlined p-button-secondary"
         icon="pi pi-times"
+        :pt="{ root: { class: 'px-4' } }"
         @click="resetForm"
       />
       <Button
@@ -70,6 +75,7 @@
         label="Save"
         icon="pi pi-check"
         :loading="loading"
+        :pt="{ root: { class: 'px-4' } }"
       />
     </div>
   </form>
@@ -147,7 +153,7 @@ function resetForm() {
 
 <style scoped>
 .field {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .p-button {

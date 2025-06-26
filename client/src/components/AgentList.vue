@@ -4,7 +4,6 @@
     <DataTable
       :value="agents"
       :loading="loading"
-      responsiveLayout="scroll"
       stripedRows
       showGridlines
       paginator
@@ -28,26 +27,32 @@
       </Column>
       <Column header="Actions" style="width: 20%">
         <template #body="slotProps">
-          <div class="flex justify-content-between gap-2">
+          <div class="flex gap-2">
             <Button
               icon="pi pi-pencil"
               class="p-button-rounded p-button-text"
-              tooltip="Edit"
-              tooltipOptions="top"
+              :pt="{
+                root: { style: { padding: '0.5rem' } }
+              }"
+              v-tooltip.top="'Edit'"
               @click="$emit('select', slotProps.data)"
             />
             <Button
               icon="pi pi-list"
               class="p-button-rounded p-button-text p-button-info"
-              tooltip="View Properties"
-              tooltipOptions="top"
+              :pt="{
+                root: { style: { padding: '0.5rem' } }
+              }"
+              v-tooltip.top="'View Properties'"
               @click="$emit('show-properties', slotProps.data)"
             />
             <Button
               icon="pi pi-trash"
               class="p-button-rounded p-button-text p-button-danger"
-              tooltip="Delete"
-              tooltipOptions="top"
+              :pt="{
+                root: { style: { padding: '0.5rem' } }
+              }"
+              v-tooltip.top="'Delete'"
               @click="confirmDelete(slotProps.data)"
             />
           </div>
@@ -73,26 +78,34 @@
       :style="{ width: '450px' }"
       header="Confirm"
       :modal="true"
+      :closable="false"
+      :pt="{
+        root: { class: 'border-round-lg' },
+        header: { class: 'bg-primary text-white' },
+        content: { class: 'p-4' }
+      }"
     >
       <div class="flex align-items-center justify-content-center">
-        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-        <span v-if="agentToDelete"
-          >Are you sure you want to delete <b>{{ agentToDelete.firstName }} {{ agentToDelete.lastName }}</b>?</span
-        >
+        <i class="pi pi-exclamation-triangle mr-3 text-yellow-500" style="font-size: 2rem" />
+        <span v-if="agentToDelete">
+          Are you sure you want to delete <b>{{ agentToDelete.firstName }} {{ agentToDelete.lastName }}</b>?
+        </span>
       </div>
       <template #footer>
-        <Button
-          label="No"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="deleteDialogVisible = false"
-        />
-        <Button
-          label="Yes"
-          icon="pi pi-check"
-          class="p-button-text p-button-danger"
-          @click="handleDelete"
-        />
+        <div class="flex justify-content-end gap-2">
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteDialogVisible = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            class="p-button-danger"
+            @click="handleDelete"
+          />
+        </div>
       </template>
     </Dialog>
   </div>
@@ -111,7 +124,7 @@ defineProps<{
   loading: boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "select", agent: PropertyAgent): void;
   (e: "delete", id: string): void;
   (e: "show-properties", agent: PropertyAgent): void;
