@@ -2,16 +2,30 @@
 <template>
   <form @submit.prevent="handleSubmit" class="flex flex-column gap-3">
     <div class="field">
-      <label for="name" class="font-bold">Name</label>
+      <label for="firstName" class="font-bold">First Name</label>
       <InputText
-        id="name"
-        v-model="formData.name"
-        :class="{ 'p-invalid': v$.name.$error }"
-        aria-describedby="name-help"
-        placeholder="Enter agent name"
+        id="firstName"
+        v-model="formData.firstName"
+        :class="{ 'p-invalid': v$.firstName.$error }"
+        aria-describedby="firstName-help"
+        placeholder="Enter first name"
       />
-      <small v-if="v$.name.$error" id="name-help" class="p-error">{{
-        v$.name.$errors[0].$message
+      <small v-if="v$.firstName.$error" id="firstName-help" class="p-error">{{
+        v$.firstName.$errors[0].$message
+      }}</small>
+    </div>
+
+    <div class="field">
+      <label for="lastName" class="font-bold">Last Name</label>
+      <InputText
+        id="lastName"
+        v-model="formData.lastName"
+        :class="{ 'p-invalid': v$.lastName.$error }"
+        aria-describedby="lastName-help"
+        placeholder="Enter last name"
+      />
+      <small v-if="v$.lastName.$error" id="lastName-help" class="p-error">{{
+        v$.lastName.$errors[0].$message
       }}</small>
     </div>
 
@@ -22,7 +36,7 @@
         v-model="formData.email"
         :class="{ 'p-invalid': v$.email.$error }"
         aria-describedby="email-help"
-        placeholder="Enter agent email"
+        placeholder="Enter email address"
       />
       <small v-if="v$.email.$error" id="email-help" class="p-error">{{
         v$.email.$errors[0].$message
@@ -30,26 +44,17 @@
     </div>
 
     <div class="field">
-      <label for="phone" class="font-bold">Phone</label>
+      <label for="mobileNumber" class="font-bold">Mobile Number</label>
       <InputText
-        id="phone"
-        v-model="formData.phone"
-        :class="{ 'p-invalid': v$.phone.$error }"
-        aria-describedby="phone-help"
-        placeholder="Enter agent phone"
+        id="mobileNumber"
+        v-model="formData.mobileNumber"
+        :class="{ 'p-invalid': v$.mobileNumber.$error }"
+        aria-describedby="mobileNumber-help"
+        placeholder="Enter mobile number"
       />
-      <small v-if="v$.phone.$error" id="phone-help" class="p-error">{{
-        v$.phone.$errors[0].$message
+      <small v-if="v$.mobileNumber.$error" id="mobileNumber-help" class="p-error">{{
+        v$.mobileNumber.$errors[0].$message
       }}</small>
-    </div>
-
-    <div class="field">
-      <label for="address" class="font-bold">Address</label>
-      <InputText 
-        id="address" 
-        v-model="formData.address" 
-        placeholder="Enter agent address"
-      />
     </div>
 
     <div class="flex justify-content-between mt-4">
@@ -92,16 +97,17 @@ const agentStore = useAgentStore();
 const loading = computed(() => agentStore.loading);
 
 const formData = reactive<CreateAgentDTO>({
-  name: "",
+  firstName: "",
+  lastName: "",
   email: "",
-  phone: "",
-  address: "",
+  mobileNumber: "",
 });
 
 const rules = {
-  name: { required },
+  firstName: { required },
+  lastName: { required },
   email: { required, email },
-  phone: { required },
+  mobileNumber: { required },
 };
 
 const v$ = useVuelidate(rules, formData);
@@ -111,10 +117,10 @@ watch(
   () => props.agent,
   (newAgent) => {
     if (newAgent) {
-      formData.name = newAgent.name;
+      formData.firstName = newAgent.firstName;
+      formData.lastName = newAgent.lastName;
       formData.email = newAgent.email;
-      formData.phone = newAgent.phone;
-      formData.address = newAgent.address || "";
+      formData.mobileNumber = newAgent.mobileNumber;
     } else {
       resetForm();
     }
@@ -131,10 +137,20 @@ async function handleSubmit() {
 
 function resetForm() {
   v$.value.$reset();
-  formData.name = "";
+  formData.firstName = "";
+  formData.lastName = "";
   formData.email = "";
-  formData.phone = "";
-  formData.address = "";
+  formData.mobileNumber = "";
   emit("reset");
 }
 </script>
+
+<style scoped>
+.field {
+  margin-bottom: 1rem;
+}
+
+.p-button {
+  min-width: 6rem;
+}
+</style>

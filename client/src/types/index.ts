@@ -1,27 +1,31 @@
 export interface PropertyAgent {
-  id: number;
-  name: string;
+  id: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone: string;
-  address?: string;
+  mobileNumber: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   properties?: Property[];
 }
 
 export interface CreateAgentDTO {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone: string;
-  address?: string;
+  mobileNumber: string;
 }
 
 export interface Property {
-  id: number;
+  id: string;
   address: string;
-  description?: string;
   propertyType: string;
   bedrooms: number;
   bathrooms: number;
-  agentId: number;
+  monthlyRent: number;
+  agentId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   agent?: PropertyAgent;
   families?: Family[];
   notes?: Note[];
@@ -29,25 +33,25 @@ export interface Property {
 
 export interface CreatePropertyDTO {
   address: string;
-  description?: string;
   propertyType: string;
   bedrooms: number;
   bathrooms: number;
-  agentId: number;
+  monthlyRent: number;
+  agentId: string;
 }
 
 export interface Family {
   id: number;
   name: string;
   contactNumber: string;
-  propertyId: number;
+  propertyId: string;
   tenants?: Tenant[];
 }
 
 export interface CreateFamilyDTO {
   name: string;
   contactNumber: string;
-  propertyId: number;
+  propertyId: string;
 }
 
 export interface Tenant {
@@ -69,10 +73,10 @@ export interface Note {
   id: number;
   content: string;
   createdAt: Date;
-  propertyId: number;
+  propertyId: string;
 }
 
 export interface CreateNoteDTO {
   content: string;
-  propertyId: number;
+  propertyId: string;
 }

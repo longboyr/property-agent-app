@@ -14,9 +14,13 @@
       class="p-datatable-sm"
     >
       <Column field="id" header="ID" style="width: 5%"></Column>
-      <Column field="name" header="Name" style="width: 25%"></Column>
+      <Column header="Name" style="width: 25%">
+        <template #body="slotProps">
+          {{ slotProps.data.firstName }} {{ slotProps.data.lastName }}
+        </template>
+      </Column>
       <Column field="email" header="Email" style="width: 25%"></Column>
-      <Column field="phone" header="Phone" style="width: 15%"></Column>
+      <Column field="mobileNumber" header="Mobile" style="width: 15%"></Column>
       <Column header="Properties" style="width: 10%">
         <template #body="slotProps">
           <span class="font-bold">{{ getPropertyCount(slotProps.data) }}</span>
@@ -49,50 +53,49 @@
           </div>
         </template>
       </Column>
-
       <template #empty>
-        <div class="flex align-items-center justify-content-center p-5">
-          <i class="pi pi-info-circle mr-2" style="font-size: 1.5rem"></i>
+        <div class="flex align-items-center justify-content-center p-4">
+          <i class="pi pi-users mr-2 text-lg" />
           <span>No agents found</span>
         </div>
       </template>
-
       <template #loading>
-        <div class="flex align-items-center justify-content-center p-5">
-          <i class="pi pi-spin pi-spinner mr-2" style="font-size: 2rem"></i>
+        <div class="flex align-items-center justify-content-center p-4">
+          <i class="pi pi-spin pi-spinner mr-2 text-lg" />
           <span>Loading agents...</span>
         </div>
       </template>
     </DataTable>
-  </div>
 
-  <Dialog
-    v-model:visible="deleteDialogVisible"
-    header="Confirm Delete"
-    :modal="true"
-    :style="{ width: '450px' }"
-    :closable="false"
-    class="p-fluid"
-  >
-    <div class="flex align-items-center justify-content-center p-4">
-      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem; color: var(--orange-500)"></i>
-      <span>Are you sure you want to delete this agent?</span>
-    </div>
-    <template #footer>
-      <Button
-        label="No"
-        icon="pi pi-times"
-        class="p-button-text"
-        @click="deleteDialogVisible = false"
-      />
-      <Button
-        label="Yes"
-        icon="pi pi-check"
-        class="p-button-danger"
-        @click="handleDelete"
-      />
-    </template>
-  </Dialog>
+    <!-- Delete Confirmation Dialog -->
+    <Dialog
+      v-model:visible="deleteDialogVisible"
+      :style="{ width: '450px' }"
+      header="Confirm"
+      :modal="true"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+        <span v-if="agentToDelete"
+          >Are you sure you want to delete <b>{{ agentToDelete.firstName }} {{ agentToDelete.lastName }}</b>?</span
+        >
+      </div>
+      <template #footer>
+        <Button
+          label="No"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="deleteDialogVisible = false"
+        />
+        <Button
+          label="Yes"
+          icon="pi pi-check"
+          class="p-button-text p-button-danger"
+          @click="handleDelete"
+        />
+      </template>
+    </Dialog>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -103,14 +106,14 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import type { PropertyAgent } from "../types";
 
-const props = defineProps<{
+defineProps<{
   agents: PropertyAgent[];
   loading: boolean;
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
   (e: "select", agent: PropertyAgent): void;
-  (e: "delete", id: number): void;
+  (e: "delete", id: string): void;
   (e: "show-properties", agent: PropertyAgent): void;
 }>();
 
@@ -128,8 +131,8 @@ function confirmDelete(agent: PropertyAgent) {
 
 function handleDelete() {
   if (agentToDelete.value) {
-    emit("delete", agentToDelete.value.id);
     deleteDialogVisible.value = false;
+    emit("delete", agentToDelete.value.id);
     agentToDelete.value = null;
   }
 }
@@ -138,7 +141,7 @@ function handleDelete() {
 <style scoped>
 .card {
   background: var(--surface-card);
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 10px;
   margin-bottom: 1rem;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02), 
