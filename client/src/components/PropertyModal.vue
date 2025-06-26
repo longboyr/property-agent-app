@@ -11,7 +11,6 @@
       header: { class: 'bg-primary text-white' }
     }"
     @update:visible="$emit('update:visible', $event)"
-    @hide="$emit('close')"
   >
     <div v-if="agent" class="property-modal-content">
       <div v-if="loading" class="loading-container">
@@ -85,14 +84,22 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
 const props = defineProps<{
-  visible: boolean;
+  modelValue: boolean;
   agent: PropertyAgent | null;
 }>();
 
 const emit = defineEmits<{
-  (e: 'close'): void;
-  (e: 'update:visible', value: boolean): void;
+  (e: 'update:modelValue', value: boolean): void;
 }>();
+
+const visible = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
+  }
+});
 
 const propertyStore = usePropertyStore();
 const loading = computed(() => propertyStore.loading);
@@ -111,7 +118,7 @@ function viewPropertyDetails(property: Property) {
 }
 
 // Load properties when modal becomes visible with an agent
-watch(() => props.visible && props.agent, (shouldLoad) => {
+watch(() => visible.value && props.agent, (shouldLoad) => {
   if (shouldLoad && props.agent) {
     propertyStore.fetchAgentProperties(props.agent.id);
   }

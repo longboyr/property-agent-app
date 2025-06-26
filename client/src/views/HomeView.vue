@@ -1,41 +1,36 @@
-<!-- src/views/HomeView.vue -->
 <template>
-  <div class="agent-manager mt-4">
-    <!-- Toast for notifications -->
+  <div class="agent-manager w-full">
+
     <Toast position="top-right" />
 
-    <!-- Agent Form and List container -->
-    <div class="grid">
-      <div class="col-12 md:col-5">
-        <div class="card mb-4">
-          <h3 class="mb-3">{{ formTitle }}</h3>
-          <AgentForm 
-            :agent="selectedAgent" 
-            @submit="handleFormSubmit" 
-            @reset="handleFormReset" 
-          />
-        </div>
+    <div class="w-full">
+      <!-- Agent Form -->
+      <div class="card mb-4">
+        <h3 class="mb-3">{{ formTitle }}</h3>
+        <AgentForm 
+          :agent="selectedAgent" 
+          @submit="handleFormSubmit" 
+          @reset="handleFormReset" 
+        />
       </div>
       
-      <div class="col-12 md:col-7">
-        <div class="card">
-          <h3 class="mb-3">Property Agents</h3>
-          <AgentList 
-            :agents="agents" 
-            :loading="loading" 
-            @select="selectAgent" 
-            @delete="deleteAgent"
-            @show-properties="showAgentProperties" 
-          />
-        </div>
+      <!-- Agent List -->
+      <div class="card">
+        <h3 class="mb-3">Property Agents</h3>
+        <AgentList 
+          :agents="agents" 
+          :loading="loading" 
+          @select="selectAgent" 
+          @delete="deleteAgent"
+          @show-properties="showAgentProperties" 
+        />
       </div>
     </div>
     
     <!-- Property Modal -->
     <PropertyModal 
-      :visible="propertyModalVisible" 
+      v-model:visible="propertyModalVisible" 
       :agent="selectedAgent"
-      @close="closePropertyModal" 
     />
   </div>
 </template>
@@ -163,7 +158,8 @@ function closePropertyModal() {
 
 <style scoped>
 .agent-manager {
-  padding: 1rem;
+  padding: 0.5rem;
+  width: 100%;
 }
 
 .card {
@@ -174,5 +170,10 @@ function closePropertyModal() {
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02), 
               0px 0px 2px rgba(0, 0, 0, 0.05), 
               0px 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+h3 {
+  margin-top: 0;
+  color: var(--text-color);
 }
 </style>
