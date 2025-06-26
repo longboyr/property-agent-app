@@ -1,6 +1,6 @@
 # Property Agent Management Application
 
-This is a full-stack application for managing property agents and their properties built with Vue 3 + TypeScript frontend and NestJS backend. This is intended as a test for Rent Pure.
+This is a full-stack application for managing property agents and their properties built with Vue 3 + TypeScript frontend and NestJS backend. This is intended as a test for PURE.
 
 ## Project Structure
 
